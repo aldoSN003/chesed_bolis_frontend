@@ -13,12 +13,15 @@ import {useNotificationProvider} from "./components/refine-ui/notification/use-n
 import {ThemeProvider} from "./components/refine-ui/theme/theme-provider";
 import {dataProvider} from "./providers/data";
 import {Layout} from "@/components/refine-ui/layout/layout.tsx";
-import {Candy, Factory, Home} from "lucide-react";
+import {Candy, Factory, Home, Container} from "lucide-react";
 import Dashboard from "@/pages/dashboard.tsx";
 import ProductosList from "@/pages/productos/list.tsx";
 import ProductosCreate from "@/pages/productos/create.tsx";
 import LotesList from "@/pages/lotes/list.tsx";
 import LotesCreate from "@/pages/lotes/create.tsx";
+import InventarioList from "@/pages/inventario/list.tsx";
+import InventarioCreate from "@/pages/inventario/create.tsx";
+
 
 function App() {
     return (
@@ -56,6 +59,12 @@ function App() {
                                     list: "/lotes",
                                     create: "/productos/create",
                                     meta: {label: "Lotes de Producción", icon: <Factory/>}
+                                },
+                                {
+                                    name: "inventario",
+                                    list: "/inventario",
+                                    create: "/inventario/create",
+                                    meta: {label: "Inventario", icon: <Container/>}
                                 }
 
 
@@ -75,6 +84,12 @@ function App() {
                                     <Route path={"/lotes"}>
                                         <Route index element={<LotesList/>}/>
                                         <Route path={"create"} element={<LotesCreate/>}/>
+
+                                    </Route>
+
+                                    <Route path={"/inventario"}>
+                                        <Route index element={<InventarioList/>}/>
+                                        <Route path={"create"} element={<InventarioCreate/>}/>
 
                                     </Route>
 

@@ -29,6 +29,18 @@ export type Lote = {
     };
 }
 
+export type Inventario = {
+    id: number
+    publicId: string
+    productoId: number
+    cantidad: number
+    actualizadoEn: string
+    producto: {
+        productoId: number
+        sabor: string
+        tipo: string
+    }
+}
 
 
 export type ListResponse<T = unknown> = {
