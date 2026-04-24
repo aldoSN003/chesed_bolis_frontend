@@ -30,6 +30,14 @@ const options: CreateDataProviderOptions = {
                     if (field === "startDate") params.startDate = value;
                     if (field === "endDate") params.endDate = value;
                 }
+
+
+                if (resource==="inventario"){
+                    if(field==="tipo") params.tipo=value;
+                    if(field==="sabor") params.search=value;
+
+                }
+
             })
             return params;
         },
