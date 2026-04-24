@@ -1,21 +1,56 @@
-import {API_URL, PRODUCTOS_MOCK} from "./constants";
-import {BaseRecord, GetListParams, GetListResponse} from "@refinedev/core";
+
+import {createDataProvider, CreateDataProviderOptions} from "@refinedev/rest";
+import {ListResponse} from "@/types";
+import {BACKEND_BASE_URL} from "@/constants";
 
 
-export const  dataProvider = ({
-  getList:async<TData extends BaseRecord = BaseRecord>({resource}:GetListParams):Promise<GetListResponse<TData>> =>{
-    if(resource!=="productos"){
-      return {data:[] as TData[], total:0}
+const options: CreateDataProviderOptions = {
+    getList: {
+        getEndpoint: ({resource}) => resource,
+
+        buildQueryParams: async ({resource,pagination,filters})=>{
+            const page = pagination?.currentPage??1;
+            const pageSize = pagination?.pageSize??10;
+            const params :Record<string,string|number>={page,limit:pageSize};
+
+            filters?.forEach((filter)=>{
+                const field = 'field' in filter ? filter.field:'';
+                const value = String (filter.value);
+                if (resource==="productos"){
+                    if(field==="tipo") params.tipo=value;
+                    if(field==="sabor") params.search=value;
+
+                }
+
+
+                if (resource === "lotes") {
+                    if (field === "tipo") params.tipo = value;
+                    if (field === "search") params.search = value;
+                    if (field === "date") params.date = value;
+                    if (field === "startDate") params.startDate = value;
+                    if (field === "endDate") params.endDate = value;
+                }
+            })
+            return params;
+        },
+
+        mapResponse: async (response) => {
+            const payload: ListResponse = (response as any)._cached
+                ?? ((response as any)._cached = await response.json());
+            return payload.data ?? [];
+        },
+
+        getTotalCount: async (response) => {
+            const payload: ListResponse = (response as any)._cached
+                ?? ((response as any)._cached = await response.json());
+            return payload.pagination?.total ?? payload.data?.length ?? 0;
+        },
+
     }
+}
 
-    return {data:PRODUCTOS_MOCK as unknown as TData[], total:PRODUCTOS_MOCK.length};
 
 
-  },
-  getOne: async()=> {throw new Error("Function not implemented.")},
-  create: async()=> {throw new Error("Function not implemented.")},
-  update: async()=> {throw new Error("Function not implemented.")},
-  deleteOne: async()=> {throw new Error("Function not implemented.")},
 
-  getApiUrl:()=>API_URL,
-});
+const {dataProvider} = createDataProvider(BACKEND_BASE_URL,options);
+export {dataProvider};

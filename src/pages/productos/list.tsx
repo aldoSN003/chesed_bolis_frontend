@@ -81,7 +81,7 @@ const ProductosList = () => {
             },
             sorters:{
                 initial:[
-                    {field:'id', order:'desc'}
+                    {field:'sabor', order:'asc'}
                 ]
             }
         }

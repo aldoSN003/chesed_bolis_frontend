@@ -1,4 +1,4 @@
-import { Refine} from "@refinedev/core";
+import {Refine} from "@refinedev/core";
 import {DevtoolsPanel, DevtoolsProvider} from "@refinedev/devtools";
 import {RefineKbar, RefineKbarProvider} from "@refinedev/kbar";
 
@@ -13,10 +13,12 @@ import {useNotificationProvider} from "./components/refine-ui/notification/use-n
 import {ThemeProvider} from "./components/refine-ui/theme/theme-provider";
 import {dataProvider} from "./providers/data";
 import {Layout} from "@/components/refine-ui/layout/layout.tsx";
-import { Candy, Home} from "lucide-react";
+import {Candy, Factory, Home} from "lucide-react";
 import Dashboard from "@/pages/dashboard.tsx";
 import ProductosList from "@/pages/productos/list.tsx";
 import ProductosCreate from "@/pages/productos/create.tsx";
+import LotesList from "@/pages/lotes/list.tsx";
+import LotesCreate from "@/pages/lotes/create.tsx";
 
 function App() {
     return (
@@ -48,6 +50,12 @@ function App() {
                                     meta: {label: 'Productos', icon: <Candy/>}
 
 
+                                },
+                                {
+                                    name: "lotes",
+                                    list: "/lotes",
+                                    create: "/productos/create",
+                                    meta: {label: "Lotes de Producción", icon: <Factory/>}
                                 }
 
 
@@ -58,11 +66,17 @@ function App() {
                                     <Outlet/>
                                 </Layout>}>
                                     <Route path={"/"} element={<Dashboard/>}/>
-                                 <Route path={"/productos"}>
-                                     <Route index element={<ProductosList/>}/>
-                                     <Route path={"create"} element={<ProductosCreate/>}/>
+                                    <Route path={"/productos"}>
+                                        <Route index element={<ProductosList/>}/>
+                                        <Route path={"create"} element={<ProductosCreate/>}/>
 
-                                 </Route>
+                                    </Route>
+
+                                    <Route path={"/lotes"}>
+                                        <Route index element={<LotesList/>}/>
+                                        <Route path={"create"} element={<LotesCreate/>}/>
+
+                                    </Route>
 
 
                                 </Route>
