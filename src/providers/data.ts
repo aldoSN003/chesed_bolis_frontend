@@ -1,9 +1,9 @@
 
 import {createDataProvider, CreateDataProviderOptions} from "@refinedev/rest";
-import {ListResponse} from "@/types";
+
 import {BACKEND_BASE_URL} from "@/constants";
 
-
+import { ListResponse, Producto } from "@/types";
 const options: CreateDataProviderOptions = {
     getList: {
         getEndpoint: ({resource}) => resource,
@@ -45,7 +45,10 @@ const options: CreateDataProviderOptions = {
         mapResponse: async (response) => {
             const payload: ListResponse = (response as any)._cached
                 ?? ((response as any)._cached = await response.json());
-            return payload.data ?? [];
+            return (payload.data ?? []).map((item: any) => ({
+                ...item,
+                id: item.publicId,
+            }));
         },
 
         getTotalCount: async (response) => {
@@ -54,7 +57,22 @@ const options: CreateDataProviderOptions = {
             return payload.pagination?.total ?? payload.data?.length ?? 0;
         },
 
-    }
+
+
+    },
+    getOne: {
+        getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+        mapResponse: async (response) => {
+            const payload = await response.json() as { data: Producto };
+
+            return {
+                ...payload.data,
+                id: payload.data.publicId,
+            };
+        },
+    },
+
 }
 
 

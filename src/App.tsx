@@ -21,6 +21,7 @@ import LotesList from "@/pages/lotes/list.tsx";
 import LotesCreate from "@/pages/lotes/create.tsx";
 import InventarioList from "@/pages/inventario/list.tsx";
 import InventarioCreate from "@/pages/inventario/create.tsx";
+import ProductosEdit from "@/pages/productos/edit.tsx";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                                     name: 'productos',
                                     list: '/productos',
                                     create: '/productos/create',
+                                    edit:"/productos/edit/:id",
                                     meta: {label: 'Productos', icon: <Candy/>}
 
 
@@ -78,6 +80,7 @@ function App() {
                                     <Route path={"/productos"}>
                                         <Route index element={<ProductosList/>}/>
                                         <Route path={"create"} element={<ProductosCreate/>}/>
+                                        <Route path={"edit/:id"} element={<ProductosEdit/>}/>
 
                                     </Route>
 

@@ -1,6 +1,6 @@
 export type Producto = {
     id: number;
-    public_id: string;
+    publicId: string;
 
     sabor: string;
     contenido_ml: number;
