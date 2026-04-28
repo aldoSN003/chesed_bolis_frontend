@@ -59,7 +59,7 @@ function App() {
                                 {
                                     name: "lotes",
                                     list: "/lotes",
-                                    create: "/productos/create",
+                                    create: "/lotes/create",
                                     meta: {label: "Lotes de Producción", icon: <Factory/>}
                                 },
                                 {
