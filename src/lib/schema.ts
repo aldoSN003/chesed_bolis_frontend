@@ -25,5 +25,21 @@ export const productoSchema = z.object({
         .positive({ message: "El costo de producción debe ser mayor a 0" }),
 });
 
+export const loteSchema = z.object({
+    productoPublicId: z.string().uuid("Producto inválido"),
+
+    fechaProduccion: z.string().min(1, "La fecha es requerida"),
+
+    cantidadProducida: z.number({
+        required_error: "Cantidad requerida",
+        invalid_type_error: "Debe ser número",
+    }).int().positive(),
+
+    costoProduccion: z.number({
+        required_error: "Costo requerido",
+        invalid_type_error: "Debe ser número",
+    }).positive(),
+});
 // Infer the TypeScript type for your React components (e.g., React Hook Form)
 export type ProductoInput = z.infer<typeof productoSchema>;
+export type LoteInput = z.infer<typeof loteSchema>;
