@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 
-import { Separator } from "@/components/ui/separator";
+import {Separator} from "@/components/ui/separator";
 import {
     Form,
     FormControl,
@@ -18,8 +18,10 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {Combobox, ComboboxOption} from "@/components/ui/combobox";
+
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -27,18 +29,18 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { CreateView } from "@/components/refine-ui/views/create-view";
-import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
+import {CreateView} from "@/components/refine-ui/views/create-view";
+import {Breadcrumb} from "@/components/refine-ui/layout/breadcrumb";
 
-import { Loader2 } from "lucide-react";
+import {Loader2} from "lucide-react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import {zodResolver} from "@hookform/resolvers/zod";
 
-import { useForm } from "@refinedev/react-hook-form";
-import { useList, useOne } from "@refinedev/core";
+import {useForm} from "@refinedev/react-hook-form";
+import {useList, useOne} from "@refinedev/core";
 
-import { loteSchema, LoteInput } from "@/lib/schema";
-import { Producto } from "@/types";
+import {loteSchema, LoteInput} from "@/lib/schema";
+import {Producto} from "@/types";
 
 type ProductoSelect = Producto & {
     id: string; // publicId
@@ -93,7 +95,7 @@ const LotesCreate = () => {
                 fechaProduccion:
                 today,
                 cantidadProducida:
-                    1,
+                    undefined as unknown as number,
                 costoProduccion:
                     0,
             },
@@ -123,7 +125,7 @@ const LotesCreate = () => {
     const cantidadProducida =
         watch(
             "cantidadProducida"
-        ) ?? 1;
+        );
 
     /**
      * LOAD PRODUCT
@@ -160,7 +162,15 @@ const LotesCreate = () => {
         const cantidad =
             Number(
                 cantidadProducida
-            ) || 1;
+            );
+
+        if (isNaN(cantidad) || cantidad <= 0) {
+            setValue("costoProduccion", 0, {
+                shouldValidate: true,
+                shouldDirty: true,
+            });
+            return;
+        }
 
         const total =
             costoUnitario *
@@ -200,7 +210,7 @@ const LotesCreate = () => {
 
     return (
         <CreateView>
-            <Breadcrumb />
+            <Breadcrumb/>
 
             <h1 className="page-title text-3xl font-bold mt-4">
                 Crear Lote de
@@ -218,7 +228,7 @@ const LotesCreate = () => {
                 </p>
             </div>
 
-            <Separator />
+            <Separator/>
 
             <div className="my-6 flex items-center">
                 <Card className="w-full max-w-3xl">
@@ -230,7 +240,7 @@ const LotesCreate = () => {
                         </CardTitle>
                     </CardHeader>
 
-                    <Separator />
+                    <Separator/>
 
                     <CardContent className="mt-7">
                         <Form
@@ -251,63 +261,27 @@ const LotesCreate = () => {
                                     render={({
                                                  field,
                                              }) => (
-                                        <FormItem>
+                                        <FormItem className="flex flex-col">
                                             <FormLabel>
                                                 Producto
                                                 *
                                             </FormLabel>
 
-                                            <Select
-                                                value={
-                                                    field.value ||
-                                                    ""
-                                                }
-                                                onValueChange={
-                                                    field.onChange
-                                                }
-                                            >
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Selecciona producto" />
-                                                    </SelectTrigger>
-                                                </FormControl>
+                                            <FormControl>
+                                                <Combobox
+                                                    options={productos.map((item) => ({
+                                                        label: `${item.sabor} (${item.tipo})`,
+                                                        value: item.id,
+                                                    }))}
+                                                    value={field.value}
+                                                    onValueChange={field.onChange}
+                                                    placeholder="Selecciona producto"
+                                                    searchPlaceholder="Buscar producto..."
+                                                    noResultsText={productosLoading ? "Cargando productos..." : "No se encontraron productos."}
+                                                />
+                                            </FormControl>
 
-                                                <SelectContent>
-                                                    {productosLoading ? (
-                                                        <div className="px-2 py-2 text-sm text-muted-foreground">
-                                                            Cargando
-                                                            productos...
-                                                        </div>
-                                                    ) : (
-                                                        productos.map(
-                                                            (
-                                                                item
-                                                            ) => (
-                                                                <SelectItem
-                                                                    key={
-                                                                        item.id
-                                                                    }
-                                                                    value={
-                                                                        item.id
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        item.sabor
-                                                                    }{" "}
-                                                                    (
-                                                                    {
-                                                                        item.tipo
-                                                                    }
-
-                                                                    )
-                                                                </SelectItem>
-                                                            )
-                                                        )
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
-
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
@@ -334,7 +308,7 @@ const LotesCreate = () => {
                                                 />
                                             </FormControl>
 
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
@@ -357,33 +331,24 @@ const LotesCreate = () => {
                                             <FormControl>
                                                 <Input
                                                     type="number"
-                                                    min={
-                                                        1
-                                                    }
                                                     value={
-                                                        field.value ??
-                                                        ""
+                                                        field.value === undefined || field.value === null || Number.isNaN(field.value) ? "" : field.value
                                                     }
                                                     onChange={(
                                                         e
                                                     ) => {
-                                                        const value =
-                                                            e
-                                                                .target
-                                                                .valueAsNumber;
-
-                                                        field.onChange(
-                                                            Number.isNaN(
-                                                                value
-                                                            )
-                                                                ? 1
-                                                                : value
-                                                        );
+                                                        const val = e.target.value;
+                                                        if (val === "") {
+                                                            field.onChange(undefined);
+                                                            return;
+                                                        }
+                                                        const num = parseFloat(val);
+                                                        field.onChange(isNaN(num) ? undefined : num);
                                                     }}
                                                 />
                                             </FormControl>
 
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
@@ -417,12 +382,12 @@ const LotesCreate = () => {
                                                 />
                                             </FormControl>
 
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
 
-                                <Separator />
+                                <Separator/>
 
                                 <Button
                                     type="submit"
@@ -440,7 +405,7 @@ const LotesCreate = () => {
                                                 lote...
                                             </span>
 
-                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            <Loader2 className="w-4 h-4 animate-spin"/>
                                         </div>
                                     ) : (
                                         "Crear Lote"

@@ -81,7 +81,7 @@ const ProductosList = () => {
             accessorKey: "contenido_ml",
             header: () => <p className="column-title">Contenido (ml)</p>,
             cell: ({getValue}) => (
-                <span>{getValue<number>()} ml</span>
+                    <span>{getValue<number>()} ml</span>
             ),
         },
         {

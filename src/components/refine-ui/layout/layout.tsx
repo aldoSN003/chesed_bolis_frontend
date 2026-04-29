@@ -6,6 +6,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 import { Sidebar } from "./sidebar";
+import { FloatingActionButton } from "@/components/refine-ui/buttons/floating-action-button";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -33,6 +34,7 @@ export function Layout({ children }: PropsWithChildren) {
           >
             {children}
           </main>
+          <FloatingActionButton />
         </SidebarInset>
       </SidebarProvider>
     </ThemeProvider>
