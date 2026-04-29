@@ -13,7 +13,7 @@ import {useNotificationProvider} from "./components/refine-ui/notification/use-n
 import {ThemeProvider} from "./components/refine-ui/theme/theme-provider";
 import {dataProvider} from "./providers/data";
 import {Layout} from "@/components/refine-ui/layout/layout.tsx";
-import {Candy, Factory, Home, Container} from "lucide-react";
+import {Candy, Factory, Home, Container, ShoppingCart, Users, UserCheck} from "lucide-react";
 import Dashboard from "@/pages/dashboard.tsx";
 import ProductosList from "@/pages/productos/list.tsx";
 import ProductosCreate from "@/pages/productos/create.tsx";
@@ -21,7 +21,15 @@ import LotesList from "@/pages/lotes/list.tsx";
 import LotesCreate from "@/pages/lotes/create.tsx";
 import InventarioList from "@/pages/inventario/list.tsx";
 import InventarioCreate from "@/pages/inventario/create.tsx";
+import VentasList from "@/pages/ventas/list.tsx";
+import VentaCreate from "@/pages/ventas/create.tsx";
 import ProductosEdit from "@/pages/productos/edit.tsx";
+import ClientesList from "@/pages/clientes/list";
+import ClientesCreate from "@/pages/clientes/create";
+import ClientesEdit from "@/pages/clientes/edit";
+import UsuariosList from "@/pages/usuarios/list";
+import UsuariosCreate from "@/pages/usuarios/create";
+import UsuariosEdit from "@/pages/usuarios/edit";
 
 
 function App() {
@@ -30,7 +38,7 @@ function App() {
 
             <RefineKbarProvider>
                 <ThemeProvider>
-                    <DevtoolsProvider>
+                    {/*<DevtoolsProvider>*/}
                         <Refine
                             dataProvider={dataProvider}
                             notificationProvider={useNotificationProvider()}
@@ -67,6 +75,26 @@ function App() {
                                     list: "/inventario",
                                     create: "/inventario/create",
                                     meta: {label: "Inventario", icon: <Container/>}
+                                },
+                                {
+                                    name: "ventas",
+                                    list: "/ventas",
+                                    create: "/ventas/create",
+                                    meta: {label: "Ventas", icon: <ShoppingCart/>}
+                                },
+                                {
+                                    name: "clientes",
+                                    list: "/clientes",
+                                    create: "/clientes/create",
+                                    edit: "/clientes/edit/:id",
+                                    meta: {label: "Clientes", icon: <Users/>}
+                                },
+                                {
+                                    name: "usuarios",
+                                    list: "/usuarios",
+                                    create: "/usuarios/create",
+                                    edit: "/usuarios/edit/:id",
+                                    meta: {label: "Usuarios", icon: <UserCheck/>}
                                 }
 
 
@@ -96,6 +124,24 @@ function App() {
 
                                     </Route>
 
+                                    <Route path={"/ventas"}>
+                                        <Route index element={<VentasList/>}/>
+                                        <Route path={"create"} element={<VentaCreate/>}/>
+                                        <Route path={":id"} element={<VentasList/>}/>
+                                    </Route>
+
+                                    <Route path={"/clientes"}>
+                                        <Route index element={<ClientesList/>}/>
+                                        <Route path={"create"} element={<ClientesCreate/>}/>
+                                        <Route path={"edit/:id"} element={<ClientesEdit/>}/>
+                                    </Route>
+
+                                    <Route path={"/usuarios"}>
+                                        <Route index element={<UsuariosList/>}/>
+                                        <Route path={"create"} element={<UsuariosCreate/>}/>
+                                        <Route path={"edit/:id"} element={<UsuariosEdit/>}/>
+                                    </Route>
+
 
                                 </Route>
 
@@ -106,8 +152,8 @@ function App() {
                             <UnsavedChangesNotifier/>
                             <DocumentTitleHandler/>
                         </Refine>
-                        <DevtoolsPanel/>
-                    </DevtoolsProvider>
+                        {/*<DevtoolsPanel/>*/}
+                    {/*</DevtoolsProvider>*/}
                 </ThemeProvider>
             </RefineKbarProvider>
         </BrowserRouter>
